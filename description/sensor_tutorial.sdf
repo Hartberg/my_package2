@@ -175,7 +175,7 @@
             </link>
 
             <link name='lidar_link'>
-                <pose relative_to="lidar_frame">0.0 0 0.0 0 0 0</pose> <!--angles are in radian-->
+                <pose relative_to="lidar_frame"/> <!--angles are in radian-->
                 <inertial>
                     <mass>1</mass>
                     <inertia>
