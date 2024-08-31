@@ -179,12 +179,12 @@
                 <inertial>
                     <mass>1</mass>
                     <inertia>
-                        <ixx>0.016</ixx>
+                        <ixx>0.013</ixx>
                         <ixy>0</ixy>
                         <ixz>0</ixz>
-                        <iyy>0.016</iyy>
+                        <iyy>0.013</iyy>
                         <iyz>0</iyz>
-                        <izz>0.016</izz>
+                        <izz>0.02</izz>
                     </inertia>
                 </inertial>
                 <sensor name="imu_sensor" type="imu">
