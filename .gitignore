@@ -1,4 +1,7 @@
 #ignore node_modules directory
+node_modules/
 
+#txt files
+*.txt
 
-my_package/CMakeLists.txt
+my_package2/CMakeLists.txt
