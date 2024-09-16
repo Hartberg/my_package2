@@ -32,11 +32,24 @@ def generate_launch_description():
     # Setup project paths
     pkg_project_bringup = get_package_share_directory('my_package2')
     pkg_project_description = get_package_share_directory('my_package2')
+    pkg_project_gazebo = get_package_share_directory('my_package2')
+    pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
 
-    # Load the SDF file from "description" package
-    sdf_file  =  os.path.join(pkg_project_description, 'lidar_node', 'sensor_tutorial.sdf')
+    # Load the SDF file from "description" package. TROR DENNE ER TIL RVIZ
+    sdf_file  =  os.path.join(pkg_project_description, 'description', 'lidarbot_modelURDF.sdf')
     with open(sdf_file, 'r') as infp:
         robot_desc = infp.read()
+
+    # Setup to launch the simulator and Gazebo world
+    gz_sim = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')),
+        launch_arguments={'gz_args': PathJoinSubstitution([
+            pkg_project_gazebo,
+            'description',
+            'sensor_tutorial.sdf'
+        ])}.items(),
+    )
 
     # For publishing and controlling the robot pose, we need joint states of the robot
     # Configure the robot model by adjusting the joint angles using the GUI slider
@@ -65,7 +78,7 @@ def generate_launch_description():
         package='ros_gz_bridge',
         executable='parameter_bridge',
         parameters=[{
-            'config_file': os.path.join(pkg_project_bringup, 'config', 'ros_gz_example_bridge.yaml'),
+            'config_file': os.path.join(pkg_project_bringup, 'description', 'config', 'ros_gz_bridge1.yaml'),
             'qos_overrides./tf_static.publisher.durability': 'transient_local',
         }],
         output='screen'
@@ -76,14 +89,16 @@ def generate_launch_description():
     rviz = Node(
        package='rviz2',
        executable='rviz2',
-       arguments=['-d', os.path.join(pkg_project_bringup, 'config', 'rrbot.rviz')],
+       arguments=['-d', os.path.join(pkg_project_bringup, 'config', 'lidarbot.rviz')], #path må endres
        condition=IfCondition(LaunchConfiguration('rviz'))
     )
-
+#
     return LaunchDescription([
+        gz_sim,
         DeclareLaunchArgument('rviz', default_value='true',
                               description='Open RViz.'),
-        joint_state_publisher_gui,
+        bridge,
+        #joint_state_publisher_gui,
         robot_state_publisher,
         rviz
     ])
