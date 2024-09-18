@@ -53,10 +53,10 @@ def generate_launch_description():
 
     # For publishing and controlling the robot pose, we need joint states of the robot
     # Configure the robot model by adjusting the joint angles using the GUI slider
-    joint_state_publisher_gui = Node(
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
-        name='joint_state_publisher_gui',
+    joint_state_publisher = Node(
+        package='joint_state_publisher',
+        executable='joint_state_publisher',
+        name='joint_state_publisher',
         arguments=[sdf_file],
         output=['screen']
     )
@@ -98,7 +98,7 @@ def generate_launch_description():
         DeclareLaunchArgument('rviz', default_value='true',
                               description='Open RViz.'),
         bridge,
-        #joint_state_publisher_gui,
+        joint_state_publisher,
         robot_state_publisher,
         rviz
     ])
