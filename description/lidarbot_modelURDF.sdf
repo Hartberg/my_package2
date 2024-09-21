@@ -1,6 +1,8 @@
 <?xml version="1.0" ?>
 <sdf version="1.8">
-    <model name='vehicle_blue' canonical_link='chassis'>
+    <model name='vehicle_blue' canonical_link='vehicle_blue'>
+
+
         <plugin
             filename="gz-sim-diff-drive-system"
             name="gz::sim::systems::DiffDrive">
@@ -11,9 +13,19 @@
             <odom_publish_frequency>1</odom_publish_frequency>
             <topic>cmd_vel</topic>
         </plugin>
+
+        <link name='vehicle_blue'>
+            <pose relative_to='__model__'>0 0 0 0 0 0</pose>
+        </link>
+
+        <joint name='chassis_joint' type='fixed'>
+            <parent>vehicle_blue</parent>
+            <child>chassis</child>
+        </joint>
+
         <!--chassis-->
         <link name='chassis'>
-            <pose relative_to='__model__'>0.5 0 0.4 0 0 0</pose>
+            <pose relative_to='vehicle_blue'>0.5 0 0.4 0 0 0</pose>
             <visual name='visual_chassis'>
                 <geometry>
                     <box>
@@ -62,7 +74,7 @@
                     </cylinder>
                 </geometry>
             </collision>
- <!--           <sensor name="imu_sensor" type="imu">
+           <sensor name="imu_sensor" type="imu">
                 <always_on>1</always_on>
                 <update_rate>1</update_rate>
                 <visualize>true</visualize>
@@ -96,7 +108,7 @@
                 <always_on>1</always_on>
                 <visualize>true</visualize>
             </sensor>
-            -->
+            
         </link>
             
         <!--Left wheel-->

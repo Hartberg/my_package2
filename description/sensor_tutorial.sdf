@@ -7,6 +7,7 @@
             <real_time_factor>1.0</real_time_factor>
         </physics>
 
+
         <plugin
             filename="gz-sim-physics-system"
             name="gz::sim::systems::Physics">
@@ -135,7 +136,13 @@
                 <topic>cmd_vel</topic>
             </plugin>
 
-
+            <plugin
+                 filename="gz-sim-joint-state-publisher-system"
+                 name="gz::sim::systems::JointStatePublisher">
+                 <update_rate>10</update_rate>
+                 <joint_name>left_wheel_joint</joint_name>
+                 <joint_name>right_wheel_joint</joint_name>
+            </plugin>
 
             <!--chassis-->
             <link name='chassis'>

@@ -40,6 +40,10 @@ def generate_launch_description():
     with open(sdf_file, 'r') as infp:
         robot_desc = infp.read()
 
+    # Load the SDF file from "description" package. TROR DENNE ER TIL RVIZ
+    #sdf_file_true  =  os.path.join(pkg_project_description, 'description', 'sensor_tutorial.sdf')
+
+
     # Setup to launch the simulator and Gazebo world
     gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -51,12 +55,19 @@ def generate_launch_description():
         ])}.items(),
     )
 
-    # For publishing and controlling the robot pose, we need joint states of the robot
-    # Configure the robot model by adjusting the joint angles using the GUI slider
+    # joint state publisher. does not work atm
     joint_state_publisher = Node(
         package='joint_state_publisher',
         executable='joint_state_publisher',
         name='joint_state_publisher',
+        arguments=[sdf_file],
+        output=['screen']
+    )
+
+    joint_state_publisher_gui = Node(
+        package='joint_state_publisher_gui',
+        executable='joint_state_publisher_gui',
+        name='joint_state_publisher_gui',
         arguments=[sdf_file],
         output=['screen']
     )
@@ -89,16 +100,17 @@ def generate_launch_description():
     rviz = Node(
        package='rviz2',
        executable='rviz2',
-       arguments=['-d', os.path.join(pkg_project_bringup, 'config', 'lidarbot.rviz')], #path må endres
+       arguments=['-d', os.path.join(pkg_project_bringup, 'config', 'lidarbot.rviz')], 
        condition=IfCondition(LaunchConfiguration('rviz'))
     )
-#
+
     return LaunchDescription([
         gz_sim,
         DeclareLaunchArgument('rviz', default_value='true',
                               description='Open RViz.'),
         bridge,
         joint_state_publisher,
+        #joint_state_publisher_gui,
         robot_state_publisher,
         rviz
     ])
