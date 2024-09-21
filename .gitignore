@@ -2,6 +2,6 @@
 node_modules/
 
 #txt files
-*.txt
+#*.txt
 
 my_package2/CMakeLists.txt
